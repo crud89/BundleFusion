@@ -58,7 +58,7 @@ void Bundler::initSift(unsigned int widthSift, unsigned int heightSift, bool isL
 {
 	if (isLocal) {
 		m_sift = new SiftGPU;
-		m_sift->SetParams(widthSift, heightSift, false, 150, GlobalAppState::get().s_sensorDepthMin, GlobalAppState::get().s_sensorDepthMax);
+		m_sift->SetParams(widthSift, heightSift, false, GlobalBundlingState::get().s_maxNumKeysPerImage, GlobalAppState::get().s_sensorDepthMin, GlobalAppState::get().s_sensorDepthMax);
 		m_sift->InitSiftGPU();
 	}
 	else {

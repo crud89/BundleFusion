@@ -29,7 +29,7 @@ s_denseOverlapCheckSubsampleFactor = 4;
 
 s_maxNumImages = 1200;
 s_submapSize = 10;
-s_maxNumKeysPerImage = 1024;
+s_maxNumKeysPerImage = 150;
 
 s_useLocalDense = true;
 s_numOptPerResidualRemoval = 1; 
