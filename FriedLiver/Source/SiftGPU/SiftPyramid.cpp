@@ -245,11 +245,20 @@ void SiftPyramid::LimitFeatureCount(int have_keylist)
 	else
 	{
 		int i = 0, num_to_erase = 0;
+		//remove remaining levels before the number of features drops below the threshold.
 		while (_featureNum - _levelFeatureNum[i] > _FeatureCountThreshold)
 		{
 			num_to_erase += _levelFeatureNum[i];
 			_featureNum -= _levelFeatureNum[i];
 			_levelFeatureNum[i++] = 0;
+		}
+		//clamp number of features in the last contributing level.
+		if (_featureNum > _FeatureCountThreshold)
+		{
+			int num_to_erase_last = _featureNum - _FeatureCountThreshold;
+			num_to_erase += num_to_erase_last;
+			_featureNum -= num_to_erase_last;
+			_levelFeatureNum[i] -= num_to_erase_last;
 		}
 	}
 }
@@ -745,7 +754,7 @@ void SiftPyramid::CreateGlobalKeyPointList(float4* d_keypoints, const float* d_d
 
 	//if needed, eliminate lower level keypoints first
 	std::vector<int> numKeysPerLevel(n, 0); int cur = 0;
-	const bool bHasMax = maxNumKeyPoints == (unsigned int)-1;
+	const bool bHasMax = maxNumKeyPoints != (unsigned int)-1;
 	for (int i = n - 1; i >= 0; i--) {
 		if (!bHasMax) numKeysPerLevel[i] = _levelFeatureNum[i];
 		else {
