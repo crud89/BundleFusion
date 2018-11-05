@@ -104,7 +104,8 @@ void __global__ SortKeyPointMatchesCU_Kernel(
 	__shared__ bool swapped;
 	swapped = true;
 	unsigned int run = 0;
-	while (swapped) {
+	//at least one odd phase is required
+	while (swapped || run < 2) {
 		swapped = false;
 
 		unsigned int idx0 = 2 * tidx + 0;
