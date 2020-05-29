@@ -989,7 +989,7 @@ void __global__ ComputeOrientation_Kernel(float4* d_list,
 			const unsigned int p = (tidx + 1) % 36;
 			target[tidx] = (source[m] + source[c] + source[p])*one_third;
 
-			__syncthreads();
+			__threadfence();
 			volatile float *tmp = source;
 			source = target;
 			target = tmp;
@@ -1100,8 +1100,8 @@ void __global__ ComputeOrientation_Kernel(float4* d_list,
 	__syncthreads();
 	if (tidx == 0) {
 		weights[maxIndex] = -1.0f;
-		__syncthreads();
 	}
+	__syncthreads();
 
 	// 2nd reduction to compute 2nd max weight
 	for (unsigned int stride = COMPUTE_ORIENTATION_BLOCK / 2; stride > 0; stride /= 2) {
