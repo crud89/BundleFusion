@@ -1,5 +1,5 @@
 .vs
 /external/mLibExternal/
-x64/[D][d]ebug
-x64/[R][r]elease
+**/x64/[Dd]ebug
+**/x64/[Rr]elease
 *.vcxproj.user
