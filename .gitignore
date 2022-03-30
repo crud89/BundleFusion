@@ -3,3 +3,4 @@
 **/x64/[Dd]ebug
 **/x64/[Rr]elease
 *.vcxproj.user
+CompiledShaders
