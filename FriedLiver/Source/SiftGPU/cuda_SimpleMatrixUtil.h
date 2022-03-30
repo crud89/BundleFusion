@@ -1196,7 +1196,7 @@ public:
 
 	//! prints the matrix	
 	inline __device__ __host__ void print() const {
-		printf("%.3f %.3f %.3f %.3f\n%.3f %.3f %.3f %.3f\n%.3f %.3f %.3f %.3f\n\n",
+		printf("%.3f %.3f %.3f %.3f\n%.3f %.3f %.3f %.3f\n%.3f %.3f %.3f %.3f\n%.3f %.3f %.3f %.3f\n\n",
 			entries[0],  entries[1],  entries[2],  entries[3],
 			entries[4],  entries[5],  entries[6],  entries[7],
 			entries[8],  entries[9],  entries[10], entries[11],
