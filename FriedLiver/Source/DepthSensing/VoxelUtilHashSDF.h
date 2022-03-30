@@ -29,7 +29,7 @@ typedef signed char schar;
 
 #include <cutil_inline.h>
 #include <cutil_math.h>
-#include <device_functions.h>
+#include <cuda_runtime_api.h>
 
 #include "cuda_SimpleMatrixUtil.h"
 #include "CUDAHashParams.h"

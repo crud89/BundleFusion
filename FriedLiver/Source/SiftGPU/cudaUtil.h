@@ -6,6 +6,8 @@
 #undef max
 #undef min
 
+#define CUDA_SYNC_FULL_MASK 0xFFFFFFFF
+
 #include <cutil_inline.h>
 #include <cutil_math.h>
 
@@ -24,20 +26,20 @@
 __inline__ __device__
 float warpReduceSum(float val) {
 	for (int offset = warpSize / 2; offset > 0; offset /= 2)
-		val += __shfl_down_sync(val, offset);
+		val += __shfl_down_sync(CUDA_SYNC_FULL_MASK, val, offset);
 	return val;
 }
 __inline__ __device__
 float warpReduceMax(float val) {
 	for (int offset = 32 / 2; offset > 0; offset /= 2) {
-		val = max(val, __shfl_down_sync(val, offset, 32));
+		val = max(val, __shfl_down_sync(CUDA_SYNC_FULL_MASK, val, offset, 32));
 	}
 	return val;
 }
 __inline__ __device__
 float warpReduceMin(float val) {
 	for (int offset = 32 / 2; offset > 0; offset /= 2) {
-		val = min(val, __shfl_down_sync(val, offset, 32));
+		val = min(val, __shfl_down_sync(CUDA_SYNC_FULL_MASK, val, offset, 32));
 	}
 	return val;
 }
@@ -45,21 +47,21 @@ float warpReduceMin(float val) {
 __inline__ __device__
 float warpReduceSumAll(float val) {
 	for (int offset = 32 / 2; offset > 0; offset /= 2) {
-		val += __shfl_xor(val, offset, 32);
+		val += __shfl_xor_sync(CUDA_SYNC_FULL_MASK, val, offset, 32);
 	}
 	return val;
 }
 __inline__ __device__
 float warpReduceMaxAll(float val) {
 	for (int offset = 32 / 2; offset > 0; offset /= 2) {
-		val = max(val, __shfl_xor(val, offset, 32));
+		val = max(val, __shfl_xor_sync(CUDA_SYNC_FULL_MASK, val, offset, 32));
 	}
 	return val;
 }
 __inline__ __device__
 float warpReduceMinAll(float val) {
 	for (int offset = 32 / 2; offset > 0; offset /= 2) {
-		val = min(val, __shfl_xor(val, offset, 32));
+		val = min(val, __shfl_xor_sync(CUDA_SYNC_FULL_MASK, val, offset, 32));
 	}
 	return val;
 }

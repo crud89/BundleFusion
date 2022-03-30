@@ -6,7 +6,7 @@
 
 #include <cutil_inline.h>
 #include <cutil_math.h>
-#include <device_functions.h>
+#include <cuda_runtime_api.h>
 #include <math_constants.h>
 
 #include "../../SiftGPU/cuda_SimpleMatrixUtil.h"
