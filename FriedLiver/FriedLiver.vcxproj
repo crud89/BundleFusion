@@ -83,7 +83,7 @@
     <CudaCompile>
       <Include>Include\cutil\inc;$(SolutionDir)</Include>
       <TargetMachinePlatform>64</TargetMachinePlatform>
-      <CodeGeneration>compute_52,sm_52</CodeGeneration>
+      <CodeGeneration>compute_60,sm_60</CodeGeneration>
       <MaxRegCount>62</MaxRegCount>
       <GenerateRelocatableDeviceCode>true</GenerateRelocatableDeviceCode>
       <GPUDebugInfo>false</GPUDebugInfo>
@@ -119,7 +119,7 @@
     <CudaCompile>
       <TargetMachinePlatform>64</TargetMachinePlatform>
       <Include>Include\cutil\inc;$(SolutionDir)</Include>
-      <CodeGeneration>compute_52,sm_52</CodeGeneration>
+      <CodeGeneration>compute_60,sm_60</CodeGeneration>
       <MaxRegCount>62</MaxRegCount>
       <FastMath>true</FastMath>
       <Optimization>O3</Optimization>
