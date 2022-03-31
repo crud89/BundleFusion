@@ -374,7 +374,7 @@ const std::vector<int>& Bundler::getValidImages() const
 
 void Bundler::invalidateLastFrame()
 {
-	if (m_siftManager->getNumImages() <= 1) { // can't invalidate first chunk //TODO ALLOW INVALIDATION OF FIRST FRAME
+	if (m_siftManager->getNumImages() < 1) { // can't invalidate first chunk //TODO ALLOW INVALIDATION OF FIRST FRAME
 		std::cout << "INVALID FIRST CHUNK" << std::endl;
 		std::ofstream s(util::directoryFromPath(GlobalAppState::get().s_binaryDumpSensorFile) + "processed.txt");
 		s << "valid = false" << std::endl;

@@ -2,7 +2,7 @@
 
 //#define KINECT
 #define KINECT_ONE
-//#define OPEN_NI
+#define OPEN_NI
 #define BINARY_DUMP_READER
 //#define INTEL_SENSOR
 //#define REAL_SENSE

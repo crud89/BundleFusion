@@ -27,6 +27,9 @@ KinectOneSensor::KinectOneSensor()
 	m_pDepthUndistortedPixelBuffer = NULL;
 	m_pDepthDistortionMap = NULL;
 	m_pDepthDistortionLT = NULL;
+	m_pDepthFrameReader = NULL;
+	m_pColorFrameReader = NULL;
+	m_pMultiSourceFrameReader = NULL;
 
 	createFirstConnected();
 
@@ -48,6 +51,7 @@ KinectOneSensor::KinectOneSensor()
 		if (SUCCEEDED(hr))
 		{
 			hr = pDepthFrameReference->AcquireFrame(&pDepthFrame);
+			MLIB_ASSERT(hr == S_OK);
 		}
 
 		SafeRelease(pDepthFrameReference);
@@ -61,6 +65,7 @@ KinectOneSensor::KinectOneSensor()
 		if (SUCCEEDED(hr))
 		{
 			hr = pColorFrameReference->AcquireFrame(&pColorFrame);
+			MLIB_ASSERT(hr == S_OK);
 		}
 
 		SafeRelease(pColorFrameReference);
@@ -133,6 +138,8 @@ KinectOneSensor::~KinectOneSensor()
 {
 	if (m_pKinectSensor)			m_pKinectSensor->Release();
 	if (m_pMultiSourceFrameReader)	m_pMultiSourceFrameReader->Release();
+	if (m_pDepthFrameReader)		m_pDepthFrameReader->Release();
+	if (m_pColorFrameReader)		m_pColorFrameReader->Release();
 	if (m_pCoordinateMapper)		m_pCoordinateMapper->Release();
 	if (m_pColorCoordinates)		delete [] m_pColorCoordinates;
 
@@ -154,6 +161,10 @@ KinectOneSensor::~KinectOneSensor()
 
 void KinectOneSensor::createFirstConnected()
 {
+	// Do not attempt to acquire the same sensor instance twice.
+	if (m_pKinectSensor)
+		return;
+
 	HRESULT hr = GetDefaultKinectSensor(&m_pKinectSensor);
 	if (FAILED(hr)) { std::cerr << "failed to initialize kinect sensor" << std::endl; return; };
 
@@ -172,6 +183,25 @@ void KinectOneSensor::createFirstConnected()
 			hr = m_pKinectSensor->OpenMultiSourceFrameReader(
 				FrameSourceTypes::FrameSourceTypes_Depth | FrameSourceTypes::FrameSourceTypes_Color,
 				&m_pMultiSourceFrameReader);
+
+			// Initialize the Kinect and get the depth reader
+			IDepthFrameSource* pDepthFrameSource = NULL;
+			IColorFrameSource* pColorFrameSource = NULL;
+
+			if (SUCCEEDED(hr))
+				hr = m_pKinectSensor->get_DepthFrameSource(&pDepthFrameSource);
+
+			if (SUCCEEDED(hr))
+				hr = pDepthFrameSource->OpenReader(&m_pDepthFrameReader);
+
+			if (SUCCEEDED(hr))
+				hr = m_pKinectSensor->get_ColorFrameSource(&pColorFrameSource);
+
+			if (SUCCEEDED(hr))
+				hr = pColorFrameSource->OpenReader(&m_pColorFrameReader);
+
+			SafeRelease(pDepthFrameSource);
+			SafeRelease(pColorFrameSource);
 		}
 	}
 
@@ -184,33 +214,21 @@ bool KinectOneSensor::processDepth()
 	IDepthFrame* pDepthFrame = NULL;
 	IColorFrame* pColorFrame = NULL;
 
-	HRESULT hr = m_pMultiSourceFrameReader->AcquireLatestFrame(&pMultiSourceFrame);
+	//HRESULT hr = m_pMultiSourceFrameReader->AcquireLatestFrame(&pMultiSourceFrame);
+	HRESULT hr = m_pDepthFrameReader->AcquireLatestFrame(&pDepthFrame);
 
-	if(SUCCEEDED(hr))
-	{
-		IDepthFrameReference* pDepthFrameReference = NULL;
+	while (hr == E_PENDING)
+		hr = m_pDepthFrameReader->AcquireLatestFrame(&pDepthFrame);
 
-		hr = pMultiSourceFrame->get_DepthFrameReference(&pDepthFrameReference);
-		if (SUCCEEDED(hr))
-		{
-			hr = pDepthFrameReference->AcquireFrame(&pDepthFrame);
-		}
-
-		SafeRelease(pDepthFrameReference);
-	}
-	if (SUCCEEDED(hr)) hr = copyDepth(pDepthFrame);
+	if (SUCCEEDED(hr)) 
+		hr = copyDepth(pDepthFrame);
 
 	if (SUCCEEDED(hr))
 	{
-		IColorFrameReference* pColorFrameReference = NULL;
+		hr = m_pColorFrameReader->AcquireLatestFrame(&pColorFrame);
 
-		hr = pMultiSourceFrame->get_ColorFrameReference(&pColorFrameReference);
-		if (SUCCEEDED(hr))
-		{
-			hr = pColorFrameReference->AcquireFrame(&pColorFrame);
-		}
-
-		SafeRelease(pColorFrameReference);
+		while (hr == E_PENDING)
+			hr = m_pColorFrameReader->AcquireLatestFrame(&pColorFrame);
 	}
 
 	if (SUCCEEDED(hr))
@@ -316,7 +334,7 @@ bool KinectOneSensor::processDepth()
 
 	if (SUCCEEDED(hr) && m_bFirstFrame) {
 		m_bFirstFrame = false;
-		return false;
+		return true;
 	}
 
 	if (FAILED(hr)) return false;

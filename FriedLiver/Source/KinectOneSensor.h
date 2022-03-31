@@ -60,6 +60,8 @@ private:
 
 	// Frame reader
 	IMultiSourceFrameReader* m_pMultiSourceFrameReader;
+	IDepthFrameReader* m_pDepthFrameReader;
+	IColorFrameReader* m_pColorFrameReader;
 
 	// Mapping color to depth
 	unsigned int			 m_inputColorWidth;
