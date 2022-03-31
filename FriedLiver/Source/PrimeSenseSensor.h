@@ -38,6 +38,10 @@ public:
 		return true;
 	}
 
+	std::string getSensorName() const {
+		return std::string(m_device.getDeviceInfo().getName());
+	}
+
 protected:
 	//! reads depth and color from the sensor
 	bool readDepthAndColor(float* depthFloat, vec4uc* colorRGBX);
