@@ -996,7 +996,9 @@ void CALLBACK OnD3D11FrameRender(ID3D11Device* pd3dDevice, ID3D11DeviceContext* 
 	}
 #else
 	bool bGotDepth = g_CudaImageManager->process();
-	g_depthSensingBundler->processInput();
+
+	if (bGotDepth)
+		g_depthSensingBundler->processInput();
 #endif
 
 	///////////////////////////////////////
@@ -1084,7 +1086,7 @@ void CALLBACK OnD3D11FrameRender(ID3D11Device* pd3dDevice, ID3D11DeviceContext* 
 		TimingLog::addTotalFrameTime(GlobalAppState::get().s_Timer.getElapsedTimeMS());
 		std::cout << "<<< [Frame: " << g_CudaImageManager->getCurrFrameNumber() << " ] " << g_sceneRep->getHeapFreeCount() << " Frame Time:\t " << GlobalAppState::get().s_Timer.getElapsedTimeMS() << " [ms] >>>" << std::endl;
 	}
-	else {
+	else if (bGotDepth) {
 		std::cout << "<<< [Frame: " << g_CudaImageManager->getCurrFrameNumber() << " ] " << g_sceneRep->getHeapFreeCount() << " >>>" << std::endl;
 	}
 

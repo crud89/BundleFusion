@@ -334,7 +334,7 @@ bool KinectOneSensor::processDepth()
 
 	if (SUCCEEDED(hr) && m_bFirstFrame) {
 		m_bFirstFrame = false;
-		return true;
+		return false;
 	}
 
 	if (FAILED(hr)) return false;

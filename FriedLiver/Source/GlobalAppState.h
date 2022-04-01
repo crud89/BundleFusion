@@ -9,7 +9,7 @@
 #define STRUCTURE_SENSOR
 #define SENSOR_DATA_READER
 
-#define RUN_MULTITHREADED
+//#define RUN_MULTITHREADED
 
 #include "stdafx.h"
 
