@@ -30,6 +30,8 @@ KinectOneSensor::KinectOneSensor()
 	m_pDepthFrameReader = NULL;
 	m_pColorFrameReader = NULL;
 	m_pMultiSourceFrameReader = NULL;
+	m_depthSpacePoints = NULL;
+	m_cameraSpacePoints = NULL;
 
 	createFirstConnected();
 
