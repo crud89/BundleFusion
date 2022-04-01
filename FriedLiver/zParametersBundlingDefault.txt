@@ -39,10 +39,10 @@ s_numLocalLinIterations = 100;
 s_numGlobalNonLinIterations = 3;
 s_numGlobalLinIterations = 150;
 
-//s_downsampledWidth = 160;
-//s_downsampledHeight = 120;
-s_downsampledWidth = 80;
-s_downsampledHeight = 60;
+s_downsampledWidth = 160;
+s_downsampledHeight = 120;
+//s_downsampledWidth = 80;
+//s_downsampledHeight = 60;
 
 
 //dense term filtering
