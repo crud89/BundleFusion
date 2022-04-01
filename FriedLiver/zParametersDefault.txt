@@ -30,9 +30,9 @@ s_minPoseDistSqrt = 0.0f;	//reintegrate everything above that pose distance (squ
 // **** DEPTH SENSING BELOW ***** //
 ////////////////////////////////////
 
-s_sensorDepthMax = 4.0f;	//maximum sensor depth in meter
+s_sensorDepthMax = 8.0f;	//maximum sensor depth in meter
 s_sensorDepthMin = 0.1f;	//minimum sensor depth in meter
-s_renderDepthMax = 4.0f;	//maximum render depth in meter
+s_renderDepthMax = 8.0f;	//maximum render depth in meter
 s_renderDepthMin = 0.1f;	//minimum render depth in meter
 
 // sdf and hash settings
